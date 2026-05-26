@@ -426,23 +426,21 @@ $$
 
 The nonlinear lift coefficient is modeled as:
 
-$$
-C_L = C_{L0} + C_{L\alpha}\alpha + C_{L\alpha3}\alpha^3
-+ C_{Lq}\frac{q\bar{c}}{2V} + C_{L\delta_e}\delta_e
-$$
+```math
+C_L = C_{L0} + C_{L\alpha}\alpha + C_{L\alpha3}\alpha^3 + C_{Lq}\frac{q\bar{c}}{2V} + C_{L\delta_e}\delta_e
+```
 
 The drag coefficient is modeled as:
 
-$$
+```math
 C_D = C_{D0} + K C_L^2 + C_{D\beta}\beta^2 + C_{D\delta_e}\delta_e^2
-$$
+```
 
 The pitching-moment coefficient is modeled as:
 
-$$
-C_m = C_{m0} + C_{m\alpha}\alpha + C_{m\alpha3}\alpha^3
-+ C_{mq}\frac{q\bar{c}}{2V} + C_{m\delta_e}\delta_e
-$$
+```math
+C_m = C_{m0} + C_{m\alpha}\alpha + C_{m\alpha3}\alpha^3 + C_{mq}\frac{q\bar{c}}{2V} + C_{m\delta_e}\delta_e
+```
 
 Example coefficient values:
 
@@ -471,13 +469,13 @@ Cm_de     = -1.10;
 
 The body-axis force coefficients are computed from lift and drag using:
 
-$$
+```math
 C_X = C_L\sin\alpha - C_D\cos\alpha
-$$
+```
 
-$$
+```math
 C_Z = -C_L\cos\alpha - C_D\sin\alpha
-$$
+```
 
 These equations allow the aerodynamic force model to be inserted directly into the body-axis equations of motion.
 
@@ -487,36 +485,21 @@ These equations allow the aerodynamic force model to be inserted directly into t
 
 The side-force coefficient is:
 
-$$
-C_Y =
-C_{Y\beta}\beta
-+ C_{Yp}\frac{pb}{2V}
-+ C_{Yr}\frac{rb}{2V}
-+ C_{Y\delta_a}\delta_a
-+ C_{Y\delta_r}\delta_r
-$$
+```math
+C_Y = C_{Y\beta}\beta + C_{Yp}\frac{pb}{2V} + C_{Yr}\frac{rb}{2V} + C_{Y\delta_a}\delta_a + C_{Y\delta_r}\delta_r
+```
 
 The rolling-moment coefficient is:
 
-$$
-C_l =
-C_{l\beta}\beta
-+ C_{lp}\frac{pb}{2V}
-+ C_{lr}\frac{rb}{2V}
-+ C_{l\delta_a}\delta_a
-+ C_{l\delta_r}\delta_r
-$$
+```math
+C_l = C_{l\beta}\beta + C_{lp}\frac{pb}{2V} + C_{lr}\frac{rb}{2V} + C_{l\delta_a}\delta_a + C_{l\delta_r}\delta_r
+```
 
 The yawing-moment coefficient is:
 
-$$
-C_n =
-C_{n\beta}\beta
-+ C_{np}\frac{pb}{2V}
-+ C_{nr}\frac{rb}{2V}
-+ C_{n\delta_a}\delta_a
-+ C_{n\delta_r}\delta_r
-$$
+```math
+C_n = C_{n\beta}\beta + C_{np}\frac{pb}{2V} + C_{nr}\frac{rb}{2V} + C_{n\delta_a}\delta_a + C_{n\delta_r}\delta_r
+```
 
 Example coefficient values:
 
