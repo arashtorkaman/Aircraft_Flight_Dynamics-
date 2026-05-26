@@ -427,33 +427,21 @@ $$
 The nonlinear lift coefficient is modeled as:
 
 $$
-C_L =
-C_{L0}
-+ C_{L\alpha}\alpha
-+ C_{L\alpha3}\alpha^3
-+ C_{Lq}\frac{q\bar{c}}{2V}
-+ C_{L\delta_e}\delta_e
+C_L = C_{L0} + C_{L\alpha}\alpha + C_{L\alpha3}\alpha^3
++ C_{Lq}\frac{q\bar{c}}{2V} + C_{L\delta_e}\delta_e
 $$
 
 The drag coefficient is modeled as:
 
 $$
-C_D =
-C_{D0}
-+ K C_L^2
-+ C_{D\beta}\beta^2
-+ C_{D\delta_e}\delta_e^2
+C_D = C_{D0} + K C_L^2 + C_{D\beta}\beta^2 + C_{D\delta_e}\delta_e^2
 $$
 
 The pitching-moment coefficient is modeled as:
 
 $$
-C_m =
-C_{m0}
-+ C_{m\alpha}\alpha
-+ C_{m\alpha3}\alpha^3
-+ C_{mq}\frac{q\bar{c}}{2V}
-+ C_{m\delta_e}\delta_e
+C_m = C_{m0} + C_{m\alpha}\alpha + C_{m\alpha3}\alpha^3
++ C_{mq}\frac{q\bar{c}}{2V} + C_{m\delta_e}\delta_e
 $$
 
 Example coefficient values:
