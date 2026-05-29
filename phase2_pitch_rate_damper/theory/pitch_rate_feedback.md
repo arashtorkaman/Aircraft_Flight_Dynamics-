@@ -4,284 +4,284 @@
 
 ---
 
-# 1. Introduction
+## 1. Introduction
 
-The objective of this phase is to design a Pitch Rate Damper for the longitudinal aircraft model developed in Phase 1.
+The objective of this phase is to design a pitch-rate damper for the longitudinal aircraft model developed in Phase 1.
 
-A pitch-rate damper is one of the simplest stability augmentation systems used in aerospace control engineering. The controller uses measured pitch rate to generate corrective elevator commands that improve aircraft damping and reduce oscillatory behavior.
+A pitch-rate damper is a stability augmentation system that uses measured pitch rate to generate corrective elevator commands. Its purpose is to improve damping of the short-period mode, reduce pitch oscillations, and improve aircraft handling qualities.
 
-The primary objective is to improve the short-period dynamic mode while preserving the overall longitudinal characteristics of the aircraft.
+This document presents the control law, closed-loop state-space formulation, root-locus design logic, MATLAB implementation, and expected engineering results.
 
 ---
 
-# 2. Longitudinal Aircraft Model
+## 2. Longitudinal Aircraft Model
 
 The longitudinal state vector is defined as:
 
-$$
-x = [u,; w,; q,; \theta]^T
-$$
+```math
+x = [u,\; w,\; q,\; \theta]^T
+```
 
 where:
 
-| State    | Description                    |
-| -------- | ------------------------------ |
-| $u$      | Forward velocity perturbation  |
-| $w$      | Vertical velocity perturbation |
-| $q$      | Pitch rate                     |
-| $\theta$ | Pitch attitude                 |
+| State | Description |
+|---|---|
+| `u` | Forward velocity perturbation |
+| `w` | Vertical velocity perturbation |
+| `q` | Pitch rate |
+| `theta` | Pitch attitude |
 
-The linearized longitudinal equations of motion are:
+The linearized longitudinal aircraft model is:
 
-$$
-\dot{x}=Ax+B\delta_e
-$$
+```math
+\dot{x} = Ax + B\delta_e
+```
 
 where:
 
-* $A$ = longitudinal system matrix
-* $B$ = control input matrix
-* $\delta_e$ = elevator deflection
+| Symbol | Description |
+|---|---|
+| `A` | Longitudinal system matrix |
+| `B` | Elevator input matrix |
+| `delta_e` | Elevator deflection |
 
 ---
 
-# 3. Open-Loop Stability Analysis
+## 3. Open-Loop Stability Analysis
 
 The open-loop poles are obtained from:
 
-$$
+```math
 \lambda = eig(A)
-$$
+```
 
-Typical eigenvalues for the Cessna 182 model are:
+Typical open-loop eigenvalues for the Cessna 182 longitudinal model are:
 
-$$
-\lambda_{SP}
-============
+```math
+\lambda_{SP} = -3.2548 \pm 1.7168j
+```
 
--3.2548
-\pm
-1.7168j
-$$
+```math
+\lambda_{PH} = -0.0052 \pm 0.1461j
+```
 
-$$
-\lambda_{PH}
-============
+These poles represent two dominant longitudinal modes.
 
--0.0052
-\pm
-0.1461j
-$$
+### Short-Period Mode
 
-These poles represent two dominant longitudinal modes:
+The short-period mode is the fast longitudinal mode. It is mainly associated with angle-of-attack and pitch-rate motion.
 
-## Short-Period Mode
+Typical characteristics:
 
-Characteristics:
+- Fast response
+- Higher natural frequency
+- Strong pitch-rate activity
+- Important for handling qualities
+- Primary target of pitch-rate damping
 
-* Fast dynamics
-* Dominated by angle of attack and pitch rate
-* Strong influence on handling qualities
-* Usually well damped
+### Phugoid Mode
 
-## Phugoid Mode
+The phugoid mode is the slow longitudinal mode. It mainly represents an exchange between kinetic energy and potential energy.
 
-Characteristics:
+Typical characteristics:
 
-* Slow oscillation
-* Exchange of kinetic and potential energy
-* Lightly damped
-* Long settling time
+- Slow oscillation
+- Low natural frequency
+- Light damping
+- Long settling time
+- Less directly affected by pitch-rate feedback
 
 ---
 
-# 4. Motivation for Pitch-Rate Feedback
+## 4. Motivation for Pitch-Rate Feedback
 
-The short-period mode may exhibit oscillatory behavior that reduces handling quality.
+The short-period mode can produce oscillatory pitch motion. If this mode is insufficiently damped, the aircraft may feel sensitive or uncomfortable to control.
 
-Pitch-rate feedback provides artificial damping by opposing rapid pitch motion.
+Pitch-rate feedback improves damping by commanding elevator motion that opposes rapid pitch motion.
 
-Benefits include:
+The main benefits are:
 
-* Reduced overshoot
-* Improved damping ratio
-* Faster settling time
-* Improved flying qualities
-* Reduced pilot workload
+- Reduced pitch oscillation
+- Lower overshoot
+- Faster settling time
+- Improved short-period damping
+- Better longitudinal handling qualities
+- Reduced pilot workload
 
 ---
 
-# 5. Pitch Rate Damper Control Law
+## 5. Pitch Rate Damper Control Law
 
-The controller uses pitch rate as the feedback signal.
+The pitch-rate damper uses pitch rate as the feedback signal.
 
-The control law is:
-
-$$
+```math
 \delta_e = -K_q q
-$$
+```
 
 where:
 
-| Symbol     | Description              |
-| ---------- | ------------------------ |
-| $\delta_e$ | Elevator command         |
-| $q$        | Pitch rate               |
-| $K_q$      | Pitch-rate feedback gain |
+| Symbol | Description |
+|---|---|
+| `delta_e` | Elevator command |
+| `q` | Pitch rate |
+| `K_q` | Pitch-rate feedback gain |
 
-The negative sign indicates that the elevator opposes the measured pitch motion.
+The negative sign means the elevator command opposes the measured pitch-rate motion.
+
+If the aircraft pitches upward too quickly, the damper commands elevator action to reduce the upward pitch rate. If the aircraft pitches downward too quickly, the controller commands the opposite elevator action.
 
 ---
 
-# 6. State Feedback Representation
+## 6. State Feedback Representation
 
 The feedback gain vector is:
 
-$$
-K = [0 ;; 0 ;; K_q ;; 0]
-$$
+```math
+K = [0 \;\; 0 \;\; K_q \;\; 0]
+```
 
-The control law becomes:
+The control law can be written as:
 
-$$
+```math
 \delta_e = -Kx
-$$
+```
 
-Since only pitch rate is fed back,
+Substituting the gain vector gives:
 
-$$
-\delta_e
-========
+```math
+\delta_e = -[0 \;\; 0 \;\; K_q \;\; 0]x
+```
 
--[0 ;; 0 ;; K_q ;; 0]x
-$$
-
-This controller only affects the pitch-rate state.
+Only the pitch-rate state is fed back. The forward velocity, vertical velocity, and pitch attitude states are not directly used by this controller.
 
 ---
 
-# 7. Closed-Loop State-Space Model
+## 7. Closed-Loop State-Space Model
 
-Starting with the open-loop system:
+Starting from the open-loop longitudinal model:
 
-$$
-\dot{x}=Ax+B\delta_e
-$$
+```math
+\dot{x} = Ax + B\delta_e
+```
 
-Substituting the feedback law:
+Substitute the control law:
 
-$$
-\delta_e=-Kx
-$$
+```math
+\delta_e = -Kx
+```
 
-gives:
+Then:
 
-$$
-\dot{x}=Ax-BKx
-$$
+```math
+\dot{x} = Ax + B(-Kx)
+```
 
-Factoring out the state vector:
+```math
+\dot{x} = Ax - BKx
+```
 
-$$
-\dot{x}=(A-BK)x
-$$
+```math
+\dot{x} = (A - BK)x
+```
 
-The closed-loop system matrix becomes:
+Therefore, the closed-loop system matrix is:
 
-$$
-A_{cl}=A-BK
-$$
+```math
+A_{cl} = A - BK
+```
 
-This matrix governs the closed-loop aircraft dynamics.
-
----
-
-# 8. Physical Interpretation
-
-Pitch-rate feedback introduces additional damping into the aircraft.
-
-When the aircraft rotates upward too quickly:
-
-* Positive pitch rate is detected.
-* Elevator deflection opposes the motion.
-* The oscillation is reduced.
-
-When the aircraft rotates downward too quickly:
-
-* Negative pitch rate is detected.
-* Elevator response again opposes the motion.
-
-This behavior is analogous to a rotational damper in a mechanical system.
+This matrix governs the aircraft dynamics after pitch-rate feedback is applied.
 
 ---
 
-# 9. Root-Locus Design
+## 8. Physical Interpretation
 
-The gain $K_q$ is varied to examine the movement of the closed-loop poles.
+Pitch-rate feedback acts like an artificial rotational damper.
 
-The closed-loop poles are computed from:
+Without the controller, the aircraft damping comes only from aerodynamic stability derivatives, such as pitch-rate damping. With the controller, elevator deflection is automatically generated to oppose pitch-rate motion.
 
-$$
-\lambda_{cl}
-============
+This increases the effective damping of the short-period mode.
 
-eig(A-BK)
-$$
-
-As $K_q$ increases:
-
-* Short-period poles move further left.
-* Damping ratio increases.
-* Settling time decreases.
-* Stability margins improve.
-
-The phugoid poles remain largely unchanged because the controller primarily affects pitch-rate dynamics.
+The controller does not primarily change the trim condition. Instead, it modifies the transient response of the aircraft.
 
 ---
 
-# 10. Gain Selection
+## 9. Root-Locus Design
 
-A practical gain selection procedure is:
+Root-locus analysis is used to examine how the closed-loop poles move as the pitch-rate feedback gain changes.
 
-### Step 1
+For each value of `K_q`, the closed-loop matrix is:
 
-Begin with:
+```math
+A_{cl}(K_q) = A - BK
+```
 
-$$
+The corresponding closed-loop poles are:
+
+```math
+\lambda_{cl} = eig(A_{cl})
+```
+
+As `K_q` increases, the expected behavior is:
+
+- Short-period poles move farther left in the complex plane.
+- Short-period damping ratio increases.
+- Settling time decreases.
+- Oscillations decay faster.
+- Phugoid poles remain mostly unchanged.
+
+The phugoid mode is less affected because pitch-rate feedback mainly targets the fast pitch dynamics.
+
+---
+
+## 10. Gain Selection Procedure
+
+A practical gain selection process is:
+
+### Step 1: Start with the open-loop case
+
+```math
 K_q = 0
-$$
+```
 
-This corresponds to the open-loop system.
+This gives the original open-loop aircraft dynamics.
 
-### Step 2
+### Step 2: Increase the gain gradually
 
-Gradually increase gain.
+Evaluate the closed-loop poles for a range of gains, for example:
 
-Monitor:
+```math
+0 \leq K_q \leq 5
+```
 
-* Pole locations
-* Damping ratio
-* Settling time
-* Control effort
+### Step 3: Monitor the response
 
-### Step 3
+For each value of `K_q`, examine:
 
-Choose a gain that:
+- Pole locations
+- Damping ratio
+- Natural frequency
+- Settling time
+- Overshoot
+- Elevator control effort
 
-* Increases damping
-* Produces smooth responses
-* Avoids actuator saturation
-* Avoids excessive control activity
+### Step 4: Select a practical gain
 
-Typical investigation range:
+Choose a gain that improves damping without creating unrealistic actuator activity.
 
-$$
-0 \le K_q \le 5
-$$
+A good gain should:
+
+- Improve short-period damping
+- Reduce oscillations
+- Avoid excessive elevator deflection
+- Avoid actuator saturation
+- Avoid excessive sensitivity to sensor noise
 
 ---
 
-# 11. MATLAB Implementation
+## 11. MATLAB Implementation
+
+### Closed-Loop Model
 
 ```matlab
 Kq = 1.0;
@@ -297,103 +297,141 @@ poles_ol = eig(A);
 poles_cl = eig(Acl);
 ```
 
----
-
-## Root Locus
+### Pole Comparison
 
 ```matlab
-Kvec = 0:0.1:5;
-
 figure;
-rlocus(ss(A,B,[0 0 1 0],0));
+plot(real(poles_ol), imag(poles_ol), 'x', 'LineWidth', 2);
+hold on;
+plot(real(poles_cl), imag(poles_cl), 'o', 'LineWidth', 2);
 grid on;
-title('Pitch Rate Damper Root Locus');
+xlabel('Real Axis');
+ylabel('Imaginary Axis');
+title('Open-Loop vs Closed-Loop Poles');
+legend('Open Loop', 'Closed Loop');
 ```
 
----
+### Gain Sweep
 
-## Step Response Comparison
+```matlab
+Kq_values = 0:0.1:5;
+
+figure;
+hold on;
+grid on;
+
+for Kq = Kq_values
+    K = [0 0 Kq 0];
+    Acl = A - B*K;
+    poles = eig(Acl);
+    plot(real(poles), imag(poles), 'b.');
+end
+
+xlabel('Real Axis');
+ylabel('Imaginary Axis');
+title('Pitch Rate Damper Gain Sweep');
+```
+
+### Step Response Comparison
 
 ```matlab
 figure;
 step(sys_ol);
 hold on;
 step(sys_cl);
-
-legend('Open Loop','Closed Loop');
 grid on;
-
-title('Open-Loop vs Closed-Loop Response');
+legend('Open Loop', 'Closed Loop');
+title('Open-Loop vs Closed-Loop Step Response');
 ```
 
 ---
 
-# 12. Expected Results
+## 12. Expected Results
 
-The pitch-rate damper should produce:
+The pitch-rate damper should improve the aircraft short-period response.
 
-* Improved short-period damping
-* Reduced oscillations
-* Faster settling
-* Lower overshoot
-* More stable pitch response
+Expected trends:
 
-Expected observations:
-
-| Metric           | Open Loop | Closed Loop |
-| ---------------- | --------- | ----------- |
-| Overshoot        | Higher    | Lower       |
-| Settling Time    | Longer    | Shorter     |
-| Damping Ratio    | Lower     | Higher      |
-| Stability Margin | Smaller   | Larger      |
+| Metric | Open Loop | Closed Loop |
+|---|---|---|
+| Overshoot | Higher | Lower |
+| Settling time | Longer | Shorter |
+| Short-period damping | Lower | Higher |
+| Pitch oscillation | More visible | Reduced |
+| Handling quality | Less favorable | Improved |
 
 ---
 
-# 13. Engineering Discussion
+## 13. Engineering Discussion
 
-Pitch-rate feedback is widely used in aerospace flight-control systems.
+Pitch-rate feedback is commonly used as an inner-loop stability augmentation system.
 
-Examples include:
+It is effective because pitch rate is directly related to the short-period mode. By feeding back pitch rate to the elevator, the controller adds damping without requiring a complex control architecture.
 
-* Stability augmentation systems
-* Fly-by-wire aircraft
-* UAV autopilots
-* Military fighter aircraft
-* Commercial transport aircraft
+This type of controller is relevant to:
 
-In modern control architectures, pitch-rate feedback is commonly used as an inner-loop controller due to its effectiveness and simplicity.
+- Stability augmentation systems
+- UAV autopilots
+- Fly-by-wire control laws
+- Aircraft pitch-attitude hold systems
+- Inner-loop longitudinal control systems
+
+The pitch-rate damper is often one of the first control loops implemented before adding outer-loop functions such as pitch-attitude hold, altitude hold, or glide-slope tracking.
 
 ---
 
-# 14. Conclusion
+## 14. Files and Figures to Include
 
-A pitch-rate damper was developed using pitch-rate feedback.
+Recommended Phase 2 project files:
 
-The control law:
+```text
+phase2_pitch_rate_damper/
+│
+├── theory/
+│   └── pitch_rate_feedback.md
+│
+├── matlab/
+│   ├── pitch_rate_damper.m
+│   └── gain_sweep_analysis.m
+│
+├── figures/
+│   ├── open_loop_poles.png
+│   ├── closed_loop_poles.png
+│   ├── gain_sweep_poles.png
+│   ├── open_loop_step_response.png
+│   └── closed_loop_step_response.png
+│
+└── README.md
+```
 
-$$
+---
+
+## 15. Conclusion
+
+A pitch-rate damper was developed for the longitudinal aircraft model.
+
+The controller uses the feedback law:
+
+```math
 \delta_e = -K_q q
-$$
+```
 
-introduces artificial damping that improves the short-period dynamics of the aircraft.
+The resulting closed-loop dynamics are governed by:
 
-The closed-loop dynamics are described by:
+```math
+A_{cl} = A - BK
+```
 
-$$
-A_{cl}=A-BK
-$$
+The pitch-rate damper increases short-period damping, reduces oscillatory pitch motion, and improves longitudinal handling qualities.
 
-Analysis demonstrates improved damping, reduced oscillations, and enhanced handling qualities.
-
-This phase represents the first closed-loop flight-control system in the aerospace engineering portfolio and provides the foundation for more advanced autopilot and flight-control designs.
+This phase represents the first closed-loop flight-control design in the aerospace engineering portfolio and provides the foundation for later autopilot functions such as pitch-attitude hold, altitude hold, and automatic landing control.
 
 ---
 
-# References
+## References
 
 1. Stevens, B. L., Lewis, F. L., and Johnson, E. N., *Aircraft Control and Simulation*.
 2. Nelson, R. C., *Flight Stability and Automatic Control*.
 3. Etkin, B., *Dynamics of Atmospheric Flight*.
 4. Cook, M. V., *Flight Dynamics Principles*.
 5. MIL-F-8785C Flying Qualities Specification.
-
