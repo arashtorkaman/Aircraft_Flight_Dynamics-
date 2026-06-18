@@ -386,11 +386,13 @@ $$
 
 The signs of these derivatives should be chosen to produce physically reasonable aircraft behavior:
 
-- \(C_{m\alpha} < 0\) for longitudinal static stability in the simplified model.
-- \(C_{m\hat{q}} < 0\) for pitch-rate damping.
-- \(C_{l\hat{p}} < 0\) for roll-rate damping.
-- \(C_{n\hat{r}} < 0\) for yaw-rate damping.
-- \(C_{n\beta} > 0\) for directional weathercock stability.
+| Stability derivative | Required sign | Physical meaning |
+|---|---:|---|
+| $C_{m_{\alpha}}$ | $< 0$ | Longitudinal static stability in the simplified model |
+| $C_{m_{\hat{q}}}$ | $< 0$ | Pitch-rate damping |
+| $C_{l_{\hat{p}}}$ | $< 0$ | Roll-rate damping |
+| $C_{n_{\hat{r}}}$ | $< 0$ | Yaw-rate damping |
+| $C_{n_{\beta}}$ | $> 0$ | Directional weathercock stability |
 
 A real high-performance fighter may be relaxed-stability or flight-control-augmented. This simplified model should therefore be interpreted as an educational surrogate, not the actual aircraft.
 
@@ -900,4 +902,3 @@ This project should be presented as an educational, F-22-inspired simulation and
 The F-22-inspired project uses public facts only for general aircraft context, such as approximate wingspan, length, engine class, and the existence of two-dimensional thrust-vectoring nozzles. Publicly available references include the U.S. Air Force F-22 Raptor fact sheet.
 
 All aerodynamic derivatives, inertia values, control-law structures, and simulation parameters in this project are representative educational assumptions.
-
