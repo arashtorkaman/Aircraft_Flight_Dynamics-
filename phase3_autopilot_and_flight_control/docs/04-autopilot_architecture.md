@@ -289,3 +289,13 @@ The following figure summarizes the Phase 3 Simulink state-feedback and cascaded
 
 ![Phase 3 Simulink state-feedback and cascaded autopilot architecture](../figures/simulink_state_feedback_and_autopilot_architecture.png)
 
+## Longitudinal Model and Controller
+
+The following figure summarizes Cessna 182 aircraft
+
+![Phase 3 Simulink state-feedback and cascaded autopilot architecture](../figures/Cessna182-longintudinal-model&control-SIMULINK diagram.png)
+
+
+
+
+
