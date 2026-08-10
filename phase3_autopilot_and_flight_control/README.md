@@ -43,11 +43,11 @@ phase3_autopilot_and_flight_control/
 
 ## Documentation
 
-### 1. [Theory](docs/theory.md)
+### 1. [Theory](docs/01-theory.md)
 
 Defines the Phase 3 mathematical foundation: longitudinal state-space dynamics, closed-loop state feedback, command tracking, LQR theory, cascaded-loop structure, performance metrics, actuator constraints, and verification philosophy.
 
-### 2. [State-Feedback Control](docs/state_feedback.md)
+### 2. [State-Feedback Control](docs/02-state_feedback.md)
 
 Covers the control law
 
@@ -59,7 +59,7 @@ $$A_{cl}=A-BK$$
 
 including controllability, pole placement, state measurement, and reference tracking.
 
-### 3. [LQR Design](docs/lqr_design.md)
+### 3. [LQR Design](docs/03-lqr_design.md)
 
 Documents the Linear Quadratic Regulator formulation
 
@@ -67,7 +67,7 @@ $$J=\int_0^\infty\left(x^TQx+u^TRu\right)dt$$
 
 with state/control weighting, Riccati solution, tuning methodology, actuator limits, and robustness checks.
 
-### 4. [Autopilot Architecture](docs/autopilot_architecture.md)
+### 4. [Autopilot Architecture](docs/04-autopilot_architecture.md)
 
 Defines the cascaded longitudinal autopilot:
 
@@ -75,11 +75,11 @@ $$h_c\rightarrow\theta_c\rightarrow q_c\rightarrow\delta_e$$
 
 and documents the corresponding Simulink architecture.
 
-### 5. [Controller Tuning](docs/controller_tuning.md)
+### 5. [Controller Tuning](docs/05-controller_tuning.md)
 
 Defines the tuning workflow for the pitch-rate, attitude, altitude, and LQR control loops, including objective performance metrics and actuator verification.
 
-### 6. [Phase 3 Results](docs/phase3_results.md)
+### 6. [Phase 3 Results](docs/06-phase3_results.md)
 
 Contains the verification/reporting structure for open-loop poles, controllability, LQR results, tracking performance, control effort, disturbance rejection, and MATLAB/Simulink comparison.
 
